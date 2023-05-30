@@ -107,6 +107,8 @@
   border-radius: 10px;
   font-size: 14px;
   margin-bottom: 10px;
+  width: fit-content;
+  margin-right: auto;
 }
 
 .user-text {
@@ -146,6 +148,10 @@
   cursor: pointer;
   margin-left: 10px;
   border-radius: 5px;
+}
+
+.chatbot-form-hidden {
+  display: none;
 }
 
 /* chatbot icon */

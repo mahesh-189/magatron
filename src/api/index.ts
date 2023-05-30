@@ -9,5 +9,6 @@ export const getInitalResponse = async () => {
 
 // function to register the user
 export const registerUser = async (data: RegisterUser) => {
-  return await AxiosInstances.post("/users/create", data);
+  const res = await AxiosInstances.post("/users/create", data);
+  return res.data;
 };

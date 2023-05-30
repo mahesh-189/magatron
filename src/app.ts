@@ -77,12 +77,12 @@ export const createChatbot = () => {
   // chatbot input section
   const chatbotInputForm = createElement("form", {
     className: "chatbot-input",
+    id: "chatbotInputForm",
   });
 
   const chatbotInput = createElement("input", {
     type: "text",
     placeholder: "Type your message",
-    id: "formInputBox",
   });
 
   chatbotInputForm.append(chatbotInput);
@@ -90,7 +90,6 @@ export const createChatbot = () => {
   const chatbotSendButton = createElement("button", {
     textContent: "Send",
     type: "submit",
-    id: "formSubmitBtn",
   });
 
   chatbotInputForm.append(chatbotSendButton);
