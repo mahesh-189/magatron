@@ -5,7 +5,8 @@ import { createElement, getElementByQuerySelector } from "./utils/index";
 export const createChatbot = () => {
   // main chatbot container
   const chatbotContainer = createElement("div", {
-    id: "chatbot-container",
+    className: "chatbot-container",
+    id: "chatbotContainer",
   });
 
   // chatbot header
@@ -39,10 +40,18 @@ export const createChatbot = () => {
 
   chatbotHeader.append(chatbotInfo);
 
-  const chatbotClose = createElement("button", { className: "chatbot-close" });
+  const chatbotClose = createElement("button", {
+    className: "chatbot-close",
+    id: "chatbotCloseBtn",
+  });
   chatbotClose.innerHTML = "&times;";
 
   chatbotHeader.append(chatbotClose);
+
+  // adding event listner on close btn to close the chat bot card
+  chatbotClose.addEventListener("click", () => {
+    chatbotContainer.classList.remove("chatbot-show-container");
+  });
 
   // appending header to container
 
@@ -57,7 +66,7 @@ export const createChatbot = () => {
     className: "chatbot-welcome-msg",
   });
 
-  chatbotWelcomeMsg.textContent = "Welcome Message";
+  chatbotWelcomeMsg.textContent = "Hi There 👋";
 
   chatbotBody.append(chatbotWelcomeMsg);
 
@@ -119,17 +128,13 @@ export const chatbotIcon = () => {
   chatbotMegatronIcon.addEventListener("click", openChatbot);
 
   function openChatbot() {
-    const chatbotContainer = getElementByQuerySelector("chatbot-container");
+    const chatbotContainer = getElementByQuerySelector("chatbotContainer");
     if (!chatbotContainer.classList.contains("chatbot-show-container")) {
       chatbotContainer.classList.add("chatbot-show-container");
-      // chatbotContainer.querySelector(".chatbot-body")?.append(loader());
-      getInitalResponse();
+      const res = getInitalResponse();
+      console.log(res);
     } else {
       chatbotContainer.classList.remove("chatbot-show-container");
     }
   }
-
-  // chatbotClose.addEventListener("click", () => {
-  //   chatbotContainer.classList.remove("chatbot-show-container");
-  // });
 };

@@ -1,5 +1,8 @@
 import { chatbotIcon, createChatbot } from "./app";
 import "./index.css";
 
-chatbotIcon();
-createChatbot();
+// function to load the bot on start
+(() => {
+  chatbotIcon();
+  createChatbot();
+})();

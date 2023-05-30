@@ -5,7 +5,7 @@
 }
 
 /* Chatbot container */
-#chatbot-container {
+.chatbot-container {
   position: fixed;
   bottom: 130px;
   right: 20px;
