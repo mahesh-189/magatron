@@ -1,4 +1,5 @@
 import { getInitalResponse } from "./api/index";
+import { getUserData } from "./services/index";
 import { createElement, getElementByQuerySelector } from "./utils/index";
 
 // function for the chatbot card
@@ -54,12 +55,13 @@ export const createChatbot = () => {
   });
 
   // appending header to container
-
   chatbotContainer.append(chatbotHeader);
 
   // Chatbot message body
-
-  const chatbotBody = createElement("div", { className: "chatbot-body" });
+  const chatbotBody = createElement("div", {
+    className: "chatbot-body",
+    id: "chatbotBody",
+  });
 
   // welcome message
   const chatbotWelcomeMsg = createElement("p", {
@@ -67,23 +69,12 @@ export const createChatbot = () => {
   });
 
   chatbotWelcomeMsg.textContent = "Hi There 👋";
-
   chatbotBody.append(chatbotWelcomeMsg);
 
-  // chatbot initial prompts
-
-  const chatbotInitialPrompts = createElement("div", {
-    className: "chatbot-initial-prompts",
-  });
-
-  chatbotBody.append(chatbotInitialPrompts);
-
   // appending chatbot message body to main container
-
   chatbotContainer.append(chatbotBody);
 
   // chatbot input section
-
   const chatbotInputForm = createElement("form", {
     className: "chatbot-input",
   });
@@ -91,6 +82,7 @@ export const createChatbot = () => {
   const chatbotInput = createElement("input", {
     type: "text",
     placeholder: "Type your message",
+    id: "formInputBox",
   });
 
   chatbotInputForm.append(chatbotInput);
@@ -98,14 +90,13 @@ export const createChatbot = () => {
   const chatbotSendButton = createElement("button", {
     textContent: "Send",
     type: "submit",
+    id: "formSubmitBtn",
   });
 
   chatbotInputForm.append(chatbotSendButton);
 
   // appending chatbot input form to main container
-
   chatbotContainer.append(chatbotInputForm);
-
   document.body.append(chatbotContainer);
 };
 
@@ -127,12 +118,11 @@ export const chatbotIcon = () => {
 
   chatbotMegatronIcon.addEventListener("click", openChatbot);
 
-  function openChatbot() {
+  async function openChatbot() {
     const chatbotContainer = getElementByQuerySelector("chatbotContainer");
     if (!chatbotContainer.classList.contains("chatbot-show-container")) {
       chatbotContainer.classList.add("chatbot-show-container");
-      const res = getInitalResponse();
-      console.log(res);
+      getUserData();
     } else {
       chatbotContainer.classList.remove("chatbot-show-container");
     }

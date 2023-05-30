@@ -1,35 +1,16 @@
-import axios from "../../node_modules/axios/index";
+import { createElement, getElementByQuerySelector } from "../utils/index";
 
-import { API, TOKEN } from "../config";
+// function to get user data
+export const getUserData = () => {
+  const chatbotBody = getElementByQuerySelector("chatbotBody");
+  const formInputBox = getElementByQuerySelector("formInputBox");
+  const formSubmitBtn = getElementByQuerySelector("formSubmitBtn");
 
-const token = localStorage.getItem(TOKEN);
+  const userDetails = { name: "", number: "", email: "" };
+  const messageFlow = [{ message: "Please enter your name" }];
+  const message = createElement("div", { className: "chatbot-text" });
+  message.innerText = "Please provide us these details for better assitance";
+  chatbotBody.appendChild(message);
 
-const AxiosInstances = axios.create({
-  baseURL: API,
-  headers: {
-    Authorization: `${token ? `Bearer ${token}` : ""}`,
-  },
-});
-
-AxiosInstances.interceptors.request.use(
-  function (config) {
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  function (error) {
-    // Handle request errors
-    return Promise.reject(error);
-  }
-);
-
-AxiosInstances.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // All api error handle here
-    throw error;
-  }
-);
-
-export default AxiosInstances;
+  console.log(formInputBox, formSubmitBtn);
+};
