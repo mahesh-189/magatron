@@ -1,3 +1,4 @@
+import { getInitalResponse } from "./api/index";
 import { createElement, getElementByQuerySelector } from "./utils/index";
 
 // function for the chatbot card
@@ -122,7 +123,7 @@ export const chatbotIcon = () => {
     if (!chatbotContainer.classList.contains("chatbot-show-container")) {
       chatbotContainer.classList.add("chatbot-show-container");
       // chatbotContainer.querySelector(".chatbot-body")?.append(loader());
-      // getInitalResponse();
+      getInitalResponse();
     } else {
       chatbotContainer.classList.remove("chatbot-show-container");
     }
