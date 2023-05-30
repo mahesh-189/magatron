@@ -1,14 +1,10 @@
-import { createElement } from "./utils/index";
+import { createElement, getElementByQuerySelector } from "./utils/index";
 
-createElement("div", {
-  id: "shbdfjshdf",
-  className: "asdasdasd",
-});
-
-function createChatbot() {
+// function for the chatbot card
+export const createChatbot = () => {
   // main chatbot container
   const chatbotContainer = createElement("div", {
-    className: "chatbot-container",
+    id: "chatbot-container",
   });
 
   // chatbot header
@@ -101,4 +97,38 @@ function createChatbot() {
   chatbotContainer.append(chatbotInputForm);
 
   document.body.append(chatbotContainer);
-}
+};
+
+// function for the chat bot icon
+export const chatbotIcon = () => {
+  const chatbotMegatronIcon = createElement("div", {
+    className: "chatbot-megatron-icon",
+  });
+
+  // chatbot image avatar
+  const chatbotImageIcon = createElement("img", {
+    src: "https://st3.depositphotos.com/8950810/17657/v/600/depositphotos_176577870-stock-illustration-cute-smiling-funny-robot-chat.jpg",
+    alt: "Chat bot logo",
+  });
+
+  chatbotMegatronIcon.append(chatbotImageIcon);
+
+  document.body.append(chatbotMegatronIcon);
+
+  chatbotMegatronIcon.addEventListener("click", openChatbot);
+
+  function openChatbot() {
+    const chatbotContainer = getElementByQuerySelector("chatbot-container");
+    if (!chatbotContainer.classList.contains("chatbot-show-container")) {
+      chatbotContainer.classList.add("chatbot-show-container");
+      // chatbotContainer.querySelector(".chatbot-body")?.append(loader());
+      // getInitalResponse();
+    } else {
+      chatbotContainer.classList.remove("chatbot-show-container");
+    }
+  }
+
+  // chatbotClose.addEventListener("click", () => {
+  //   chatbotContainer.classList.remove("chatbot-show-container");
+  // });
+};

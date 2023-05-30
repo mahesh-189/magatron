@@ -1,3 +1,4 @@
+// function to create an element
 const createElement = <T extends keyof HTMLElementTagNameMap>(
   tagName: T,
   attributes?: Partial<HTMLElementTagNameMap[T]>
@@ -13,4 +14,10 @@ const createElement = <T extends keyof HTMLElementTagNameMap>(
   return element;
 };
 
-export { createElement };
+// function to get the element by query selector
+const getElementByQuerySelector=(id:string)=>{
+const element =document.querySelector(`#${id}`)
+return element
+}
+
+export { createElement,getElementByQuerySelector };
