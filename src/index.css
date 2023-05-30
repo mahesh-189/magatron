@@ -1,20 +1,220 @@
-form {
-  background-color: pink;
-  margin-top: 100px;
-  border-radius: 40px;
-}
-.cal {
-  width: 550px;
-  height: 300px;
-  margin-left: 400px;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.button {
+/* Chatbot container */
+.chatbot-container {
+  position: fixed;
+  bottom: 130px;
+  right: 20px;
+  width: 350px;
+  background-color: #fff;
   border-radius: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
 }
-.input {
+
+.chatbot-show-container {
+  opacity: 1;
+  max-height: 500px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Chatbot header */
+.chatbot-header {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  padding: 10px;
+  background-color: #319795;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: #fff;
+}
+
+/* Chatbot avatar */
+.chatbot-avatar img {
+  border-radius: 50%;
+  margin-right: 10px;
+  width: 50px;
+}
+
+/* Chatbot info */
+.chatbot-info h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.chatbot-info span {
+  font-size: 12px;
+}
+
+/* Chatbot close button */
+.chatbot-close {
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: auto;
+  align-self: baseline;
+}
+
+/* Chatbot body */
+.chatbot-body {
+  height: 350px;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+/* Chatbot message */
+.chatbot-message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chatbot-welcome-msg {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.chatbot-initial-prompts p {
+  margin: 10px;
+  border: 1px solid #319795;
+  padding: 8px 15px;
+  text-align: center;
+  border-radius: 25px 25px 25px 0;
+  cursor: pointer;
+}
+
+.chatbot-initial-prompts p:hover {
+  background-color: #319795;
+  color: #fff;
+  transition: ease-out;
+  transition-duration: 300ms;
+}
+
+.chatbot-message .chatbot-text {
+  background-color: #f2f2f2;
+  padding: 10px;
   border-radius: 10px;
-  margin-top: 40px;
+  font-size: 14px;
+}
+
+.user-text {
+  background-color: #319795;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  width: fit-content;
+  margin-left: auto;
+}
+
+/* Chatbot input */
+.chatbot-input {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.chatbot-input input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.chatbot-input button {
+  border: none;
+  background-color: #319795;
+  color: #fff;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+/* chatbot icon */
+.chatbot-megatron-icon {
+  display: inline;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  cursor: pointer;
+}
+
+.chatbot-megatron-icon img {
+  border-radius: 50%;
+  width: 100px;
+}
+
+/* chatbot user info form */
+.chatbot-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-user-info input {
+  margin: 8px 5px;
+  font-size: 16px;
+  padding: 10px;
+  outline: none;
+}
+
+.chatbot-user-info input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.chatbot-user-info button {
+  padding: 10px;
+  background-color: #319795;
+  color: #fff;
+  margin: 10px;
+}
+
+.chatbot-courses-btn {
+  background-color: #319795;
+  padding: 5px 10px;
+  color: #fff;
+  margin: 10px 10px 25px 10px;
+}
+
+.chatbot-select-btn {
+  margin: 10px 25px;
+  padding: 5px;
+  outline: none;
+  background-color: rgb(255, 248, 238);
+}
+
+.chatbot-courseDetails-card {
+  border: 1px solid black;
+  padding: 10px 5px;
+  margin: 10px;
+}
+
+.chatbot-course-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-course-form button {
+  padding: 10px;
+  background-color: #319795;
+  color: #fff;
+  margin: 10px;
 }

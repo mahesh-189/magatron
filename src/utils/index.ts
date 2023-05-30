@@ -12,3 +12,5 @@ const createElement = <T extends keyof HTMLElementTagNameMap>(
 
   return element;
 };
+
+export { createElement };
