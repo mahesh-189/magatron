@@ -7,7 +7,7 @@ export const getInitalResponse = async () => {
     const res = await AxiosInstances.get("/services");
     return res.data;
   } catch (error) {
-    console.log(error);
+    return { success: false, message: "Failed to fetch the data", error };
   }
 };
 

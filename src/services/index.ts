@@ -139,9 +139,29 @@ export const initialResponse = async () => {
   // hiding the chat bot input form
   chatbotInputForm.classList.add("chatbot-form-hidden");
 
+  // displaying the loader
+  const myLoader = chatbotLoader();
+  myLoader.setAttribute("id", "myChatbotLoader");
+  chatbotBody.appendChild(myLoader);
+
   // getting the initial response
   const initialData = await getInitalResponse();
   console.log(initialData);
+  if (!initialData?.success) {
+    const errorMessage = createElement("div", {
+      className: "chatbot-text",
+      innerHTML:
+        "<p>Oops! Failed to load data :(</p><p>Please connect to our support team</p><p>Support Team : 9087654321</p>",
+    });
+
+    // removing the loader from chat window
+    const myLoader = document.querySelector("#myChatbotLoader");
+    chatbotBody.removeChild(myLoader);
+
+    // displaying the customized error message
+    chatbotBody.appendChild(errorMessage);
+    return;
+  }
 
   // displaying the welcome message and first response
   const welcomeMessage = createElement("div", {
@@ -149,5 +169,11 @@ export const initialResponse = async () => {
     innerText: "Please select an option to proceed",
   });
   const message = createElement("div", { className: "chatbot-text" });
+
+  // removing the loader from chat window
+  const botLoader = document.querySelector("#myChatbotLoader");
+  chatbotBody.removeChild(botLoader);
+
+  // displaying the welcome message to the user
   chatbotBody.appendChild(welcomeMessage);
 };
