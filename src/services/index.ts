@@ -1,8 +1,10 @@
+import { getInitalResponse } from "../api/index";
+import { chatbotLoader } from "../component/loader";
 import { createElement } from "../utils/index";
 
 // function to get user data
 export const getUserData = () => {
-  const chatbotBody = document.querySelector("chatbotBody");
+  const chatbotBody = document.querySelector("#chatbotBody");
   const chatbotInputForm = document.querySelector("#chatbotInputForm");
 
   // clearing the chat bot body on load
@@ -126,4 +128,27 @@ export const getUserData = () => {
 };
 
 // function to show initial response
-export const initialResponse = () => {};
+export const initialResponse = async () => {
+  // getting the initial response
+  const initialData = await getInitalResponse();
+  console.log(initialData);
+
+  // getting the element from dom
+  const chatbotBody = document.querySelector("#chatbotBody");
+  const chatbotInputForm = document.querySelector("#chatbotInputForm");
+
+  // clearing the chat bot body
+  chatbotBody.innerHTML = "";
+
+  // hiding the chat bot input form
+  chatbotInputForm.classList.add("chatbot-form-hidden");
+
+  // displaying the welcome message and first response
+  const welcomeMessage = createElement("div", {
+    className: "chatbot-text",
+    innerText: "Please select an option to proceed",
+  });
+  const message = createElement("div", { className: "chatbot-text" });
+  chatbotBody.appendChild(welcomeMessage);
+  chatbotBody.appendChild(chatbotLoader());
+};

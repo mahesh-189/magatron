@@ -1,5 +1,4 @@
-import { getInitalResponse } from "./api/index";
-import { getUserData } from "./services/index";
+import { initialResponse } from "./services/index";
 import { createElement } from "./utils/index";
 
 // function for the chatbot card
@@ -118,10 +117,10 @@ export const chatbotIcon = () => {
   chatbotMegatronIcon.addEventListener("click", openChatbot);
 
   async function openChatbot() {
-    const chatbotContainer = document.querySelector("chatbotContainer");
+    const chatbotContainer = document.querySelector("#chatbotContainer");
     if (!chatbotContainer.classList.contains("chatbot-show-container")) {
       chatbotContainer.classList.add("chatbot-show-container");
-      getUserData();
+      initialResponse();
     } else {
       chatbotContainer.classList.remove("chatbot-show-container");
     }
