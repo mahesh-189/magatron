@@ -198,5 +198,12 @@ export const initialResponse = async () => {
   function handleBtnClick(event: MouseEvent) {
     const element = event.target as HTMLDivElement;
     console.log(element, element.getAttribute("data-id"));
+
+    // removing other pills from initialResponseSection
+    const initialResponseSection = document.querySelector(
+      ".chatbot-initial-prompts"
+    );
+    initialResponseSection.innerHTML = "";
+    initialResponseSection.appendChild(element);
   }
 };

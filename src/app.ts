@@ -15,14 +15,12 @@ export const createChatbot = () => {
   const chatbotAvatar = createElement("div", { className: "chatbot-avatar" });
 
   // chatbot image avatar
-
   const chatbotImageAvatar = createElement("img", {
     src: "https://st3.depositphotos.com/8950810/17657/v/600/depositphotos_176577870-stock-illustration-cute-smiling-funny-robot-chat.jpg",
     alt: "chatbot-avatar",
   });
 
   chatbotAvatar.append(chatbotImageAvatar);
-
   chatbotHeader.append(chatbotAvatar);
 
   // chatbot info
@@ -40,13 +38,29 @@ export const createChatbot = () => {
 
   chatbotHeader.append(chatbotInfo);
 
+  // chatbot close and reset button
+  const headerBtnGroup = createElement("div", {
+    className: "header-btn-group",
+  });
   const chatbotClose = createElement("button", {
-    className: "chatbot-close",
+    className: "chatbot-header-btn",
     id: "chatbotCloseBtn",
   });
   chatbotClose.innerHTML = "&times;";
+  headerBtnGroup.appendChild(chatbotClose);
 
-  chatbotHeader.append(chatbotClose);
+  const chatbotReset = createElement("button", {
+    className: "chatbot-header-btn",
+    id: "chatbotRestartBtn",
+  });
+  chatbotReset.innerHTML = "&#8634;";
+  headerBtnGroup.appendChild(chatbotReset);
+  chatbotHeader.appendChild(headerBtnGroup);
+
+  // adding event listner on reset btn for widget reload
+  chatbotReset.addEventListener("click", () => {
+    initialResponse();
+  });
 
   // adding event listner on close btn to close the chat bot card
   chatbotClose.addEventListener("click", () => {

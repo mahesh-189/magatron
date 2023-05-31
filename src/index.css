@@ -55,15 +55,20 @@
   font-size: 12px;
 }
 
-/* Chatbot close button */
-.chatbot-close {
+/* Chatbot header button */
+.header-btn-group {
+  display: flex;
+  flex-direction: column;
+  align-self: baseline;
+  margin-left: auto;
+}
+
+.chatbot-header-btn {
   border: none;
   background-color: transparent;
   color: #fff;
   font-size: 24px;
   cursor: pointer;
-  margin-left: auto;
-  align-self: baseline;
 }
 
 /* Chatbot body */
