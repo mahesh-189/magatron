@@ -85,6 +85,7 @@ export const getUserData = () => {
       chatbotInputField.setAttribute("maxlength", "10");
     } else if (currentIndex === 2) {
       chatbotInputField.removeAttribute("minLength");
+      chatbotInputField.removeAttribute("maxlength");
       chatbotInputField.setAttribute("type", "email");
       const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       chatbotInputField.setAttribute("pattern", regexEmail.source);
