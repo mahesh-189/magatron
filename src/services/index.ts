@@ -176,4 +176,27 @@ export const initialResponse = async () => {
 
   // displaying the welcome message to the user
   chatbotBody.appendChild(welcomeMessage);
+
+  // creating the pills of the initial response
+  const initialResponseSection = createElement("div", {
+    className: "chatbot-initial-prompts",
+  });
+  chatbotBody.appendChild(initialResponseSection);
+
+  initialData?.data.map((pill: any) => {
+    const newPill = createElement("p", {
+      innerText: pill?.serviceName,
+    });
+    newPill.setAttribute("data-id", pill?._id);
+    initialResponseSection.appendChild(newPill);
+
+    // adding the event listner on pill for getting further response
+    newPill.addEventListener("click", handleBtnClick);
+  });
+
+  // function to handle the button click functionality
+  function handleBtnClick(event: MouseEvent) {
+    const element = event.target as HTMLDivElement;
+    console.log(element, element.getAttribute("data-id"));
+  }
 };
