@@ -1,4 +1,4 @@
-import { getInitalResponse } from "../api/index";
+import { getInitalResponse, getServiceByID } from "../api/index";
 import { chatbotLoader } from "../component/loader";
 import { createElement } from "../utils/index";
 
@@ -6,17 +6,34 @@ import { createElement } from "../utils/index";
 export const getUserData = () => {
   const chatbotBody = document.querySelector("#chatbotBody");
   const chatbotInputForm = document.querySelector("#chatbotInputForm");
+  const chatbotInputField = document.querySelector("#chatbotInputField");
 
   // clearing the chat bot body on load
   chatbotBody.innerHTML = "";
+  chatbotInputForm.classList.remove("chatbot-form-hidden");
 
   const userDetails = ["", "", ""];
   let currentIndex = 0;
 
   const messageFlow = [
-    { message: "Please enter your name" },
-    { message: "Please enter your phone number" },
-    { message: "Please enter your email id" },
+    {
+      message: "Please enter your name",
+      type: "text",
+      minLength: 3,
+      required: true,
+    },
+    {
+      message: "Please enter your phone number",
+      type: "number",
+      required: true,
+      pattern: "",
+    },
+    {
+      message: "Please enter your email id",
+      type: "email",
+      required: true,
+      pattern: "",
+    },
   ];
 
   const welcomeMessage = createElement("div", { className: "chatbot-text" });
@@ -28,6 +45,7 @@ export const getUserData = () => {
   chatbotBody.appendChild(welcomeMessage);
   message.innerText = messageFlow[currentIndex].message;
   chatbotBody.appendChild(message);
+  chatbotInputField.setAttribute("minLength", "3");
 
   // adding the event listner for the form
   chatbotInputForm.addEventListener("submit", handleFormSubmit);
@@ -53,8 +71,25 @@ export const getUserData = () => {
       chatbotInputForm.removeEventListener("submit", handleFormSubmit);
       chatbotInputForm.classList.add("chatbot-form-hidden");
 
+      // setting the input fields to its default values
+      chatbotInputField.removeAttribute("minLength");
+      chatbotInputField.removeAttribute("pattern");
+      chatbotInputField.setAttribute("type", "text");
       return;
     }
+    // changing the input fields attributes as per request
+    if (currentIndex === 1) {
+      const regexPhoneNumber = /^[6789]\d{9}$/;
+      chatbotInputField.setAttribute("pattern", regexPhoneNumber.source);
+      chatbotInputField.setAttribute("type", "tel");
+      chatbotInputField.setAttribute("maxlength", "10");
+    } else if (currentIndex === 2) {
+      chatbotInputField.removeAttribute("minLength");
+      chatbotInputField.setAttribute("type", "email");
+      const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      chatbotInputField.setAttribute("pattern", regexEmail.source);
+    }
+
     const message = createElement("div", { className: "chatbot-text" });
     message.innerText = messageFlow[currentIndex].message;
     chatbotBody.appendChild(message);
@@ -198,6 +233,7 @@ export const initialResponse = async () => {
   function handleBtnClick(event: MouseEvent) {
     const element = event.target as HTMLDivElement;
     console.log(element, element.getAttribute("data-id"));
+    const id = element.getAttribute("data-id");
 
     // removing other pills from initialResponseSection
     const initialResponseSection = document.querySelector(
@@ -205,5 +241,17 @@ export const initialResponse = async () => {
     );
     initialResponseSection.innerHTML = "";
     initialResponseSection.appendChild(element);
+
+    // getting the user data
+    const userData = getUserData();
+
+    // getting the service data
+    // const serviceData = getServiceByID(
+    //   element.getAttribute("data-id"),
+    //   element.innerText
+    // );
+
+    // removing the event listner from btn
+    event.target.removeEventListener("click", handleBtnClick);
   }
 };

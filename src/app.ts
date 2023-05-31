@@ -96,6 +96,8 @@ export const createChatbot = () => {
   const chatbotInput = createElement("input", {
     type: "text",
     placeholder: "Type your message",
+    id: "chatbotInputField",
+    required: true,
   });
 
   chatbotInputForm.append(chatbotInput);

@@ -20,3 +20,12 @@ export const registerUser = async (data: RegisterUser) => {
     console.log(error);
   }
 };
+
+// function to get services by id
+export const getServiceByID = async (id: string, serviceName: string) => {
+  const res = await AxiosInstances.post(`/services/${id}`, {
+    sender: "user",
+    response: serviceName,
+  });
+  console.log(res);
+};
