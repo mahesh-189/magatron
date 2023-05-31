@@ -1,6 +1,6 @@
 import { getInitalResponse } from "./api/index";
 import { getUserData } from "./services/index";
-import { createElement, getElementByQuerySelector } from "./utils/index";
+import { createElement } from "./utils/index";
 
 // function for the chatbot card
 export const createChatbot = () => {
@@ -118,7 +118,7 @@ export const chatbotIcon = () => {
   chatbotMegatronIcon.addEventListener("click", openChatbot);
 
   async function openChatbot() {
-    const chatbotContainer = getElementByQuerySelector("chatbotContainer");
+    const chatbotContainer = document.querySelector("chatbotContainer");
     if (!chatbotContainer.classList.contains("chatbot-show-container")) {
       chatbotContainer.classList.add("chatbot-show-container");
       getUserData();
