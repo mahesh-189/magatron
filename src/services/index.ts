@@ -129,10 +129,6 @@ export const getUserData = () => {
 
 // function to show initial response
 export const initialResponse = async () => {
-  // getting the initial response
-  const initialData = await getInitalResponse();
-  console.log(initialData);
-
   // getting the element from dom
   const chatbotBody = document.querySelector("#chatbotBody");
   const chatbotInputForm = document.querySelector("#chatbotInputForm");
@@ -143,6 +139,10 @@ export const initialResponse = async () => {
   // hiding the chat bot input form
   chatbotInputForm.classList.add("chatbot-form-hidden");
 
+  // getting the initial response
+  const initialData = await getInitalResponse();
+  console.log(initialData);
+
   // displaying the welcome message and first response
   const welcomeMessage = createElement("div", {
     className: "chatbot-text",
@@ -150,5 +150,4 @@ export const initialResponse = async () => {
   });
   const message = createElement("div", { className: "chatbot-text" });
   chatbotBody.appendChild(welcomeMessage);
-  chatbotBody.appendChild(chatbotLoader());
 };

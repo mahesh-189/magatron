@@ -96,6 +96,9 @@ export const createChatbot = () => {
   // appending chatbot input form to main container
   chatbotContainer.append(chatbotInputForm);
   document.body.append(chatbotContainer);
+
+  // displaying the initial response
+  initialResponse();
 };
 
 // function for the chat bot icon
@@ -120,7 +123,6 @@ export const chatbotIcon = () => {
     const chatbotContainer = document.querySelector("#chatbotContainer");
     if (!chatbotContainer.classList.contains("chatbot-show-container")) {
       chatbotContainer.classList.add("chatbot-show-container");
-      initialResponse();
     } else {
       chatbotContainer.classList.remove("chatbot-show-container");
     }
