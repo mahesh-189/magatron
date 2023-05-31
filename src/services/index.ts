@@ -1,9 +1,9 @@
-import { createElement, getElementByQuerySelector } from "../utils/index";
+import { createElement } from "../utils/index";
 
 // function to get user data
 export const getUserData = () => {
-  const chatbotBody = getElementByQuerySelector("chatbotBody");
-  const chatbotInputForm = getElementByQuerySelector("chatbotInputForm");
+  const chatbotBody = document.querySelector("chatbotBody");
+  const chatbotInputForm = document.querySelector("#chatbotInputForm");
 
   // clearing the chat bot body on load
   chatbotBody.innerHTML = "";
@@ -124,3 +124,6 @@ export const getUserData = () => {
     }
   }
 };
+
+// function to show initial response
+export const initialResponse = () => {};

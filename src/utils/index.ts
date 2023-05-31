@@ -14,10 +14,4 @@ const createElement = <T extends keyof HTMLElementTagNameMap>(
   return element;
 };
 
-// function to get the element by query selector
-const getElementByQuerySelector = (id: string) => {
-  const element = document.querySelector(`#${id}`);
-  return element;
-};
-
-export { createElement, getElementByQuerySelector };
+export { createElement };
