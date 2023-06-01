@@ -1,9 +1,10 @@
-import { getInitalResponse, getServiceByID } from "../api/index";
+import { getInitalResponse, getServiceByID, registerUser } from "../api/index";
 import { chatbotLoader } from "../component/loader";
-import { createElement } from "../utils/index";
+import { TOKEN } from "../config";
+import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
 
 // function to get user data
-export const getUserData = () => {
+export const getUserData = async (requestType: string): Promise<void> => {
   const chatbotBody = document.querySelector("#chatbotBody");
   const chatbotInputForm = document.querySelector("#chatbotInputForm");
   const chatbotInputField = document.querySelector("#chatbotInputField");
@@ -51,7 +52,7 @@ export const getUserData = () => {
   chatbotInputForm.addEventListener("submit", handleFormSubmit);
 
   // function to handle form submit
-  function handleFormSubmit(event: Event | SubmitEvent) {
+  async function handleFormSubmit(event: Event | SubmitEvent) {
     event.preventDefault();
     const myInput =
       event.target && (event.target as HTMLFormElement).querySelector("input");
@@ -67,16 +68,7 @@ export const getUserData = () => {
 
     // sending the next response
     currentIndex++;
-    if (currentIndex >= messageFlow.length) {
-      chatbotInputForm.removeEventListener("submit", handleFormSubmit);
-      chatbotInputForm.classList.add("chatbot-form-hidden");
 
-      // setting the input fields to its default values
-      chatbotInputField.removeAttribute("minLength");
-      chatbotInputField.removeAttribute("pattern");
-      chatbotInputField.setAttribute("type", "text");
-      return;
-    }
     // changing the input fields attributes as per request
     if (currentIndex === 1) {
       const regexPhoneNumber = /^[6789]\d{9}$/;
@@ -89,6 +81,33 @@ export const getUserData = () => {
       chatbotInputField.setAttribute("type", "email");
       const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       chatbotInputField.setAttribute("pattern", regexEmail.source);
+    } else {
+      chatbotInputForm.removeEventListener("submit", handleFormSubmit);
+      chatbotInputForm.classList.add("chatbot-form-hidden");
+
+      // setting the input fields to its default values
+      chatbotInputField.removeAttribute("minLength");
+      chatbotInputField.removeAttribute("pattern");
+      chatbotInputField.setAttribute("type", "text");
+
+      // creating user data for creating account
+      const { browser, os } = getBrowserAndOS();
+      const data = {
+        fullName: userDetails[0],
+        phoneNumber: userDetails[1],
+        email: userDetails[2],
+        source: "web",
+        os: os,
+        browser: browser,
+        type: requestType,
+      };
+
+      // calling the function to create the user account
+      const res = await registerUser(data);
+      // setting the token inside the local storage
+      localStorage.setItem(TOKEN, res?.data?.userData?.jwtToken);
+      console.log(res);
+      return;
     }
 
     const message = createElement("div", { className: "chatbot-text" });
@@ -96,71 +115,8 @@ export const getUserData = () => {
     chatbotBody.appendChild(message);
   }
 
-  // function to create user data for creating account
-  function createUserData() {
-    const data = {
-      fullName: "",
-      email: "",
-      phoneNumber: "",
-      source: "",
-      os: "",
-      browser: "",
-      type: "",
-    };
-
-    const { browser, os } = getBrowserAndOS();
-    data.fullName = userDetails[0];
-    data.phoneNumber = userDetails[1];
-    data.email = userDetails[2];
-    data.browser = browser;
-    data.os = os;
-    data.source = "web";
-    data.type = "pill";
-
-    // function for getting os and browser details
-    function getBrowserAndOS() {
-      const userAgent = navigator.userAgent;
-
-      // Browser name
-      let browserName: string;
-      if (userAgent.indexOf("Firefox") > -1) {
-        browserName = "Mozilla Firefox";
-      } else if (userAgent.indexOf("Chrome") > -1) {
-        browserName = "Google Chrome";
-      } else if (userAgent.indexOf("Safari") > -1) {
-        browserName = "Apple Safari";
-      } else if (userAgent.indexOf("Opera") > -1) {
-        browserName = "Opera";
-      } else if (userAgent.indexOf("Edge") > -1) {
-        browserName = "Microsoft Edge";
-      } else if (userAgent.indexOf("Trident") > -1) {
-        browserName = "Internet Explorer";
-      } else {
-        browserName = "Unknown";
-      }
-
-      // Operating system name
-      let osName: string;
-      if (userAgent.indexOf("Windows") > -1) {
-        osName = "Windows";
-      } else if (userAgent.indexOf("Mac") > -1) {
-        osName = "MacOS";
-      } else if (userAgent.indexOf("Linux") > -1) {
-        osName = "Linux";
-      } else if (userAgent.indexOf("Android") > -1) {
-        osName = "Android";
-      } else if (userAgent.indexOf("iOS") > -1) {
-        osName = "iOS";
-      } else {
-        osName = "Unknown";
-      }
-
-      return {
-        browser: browserName,
-        os: osName,
-      };
-    }
-  }
+  // calling the callback function to indicate completion
+  // callback()
 };
 
 // function to show initial response
@@ -231,7 +187,7 @@ export const initialResponse = async () => {
   });
 
   // function to handle the button click functionality
-  function handleBtnClick(event: MouseEvent) {
+  async function handleBtnClick(event: MouseEvent) {
     const element = event.target as HTMLDivElement;
     console.log(element, element.getAttribute("data-id"));
     const id = element.getAttribute("data-id");
@@ -243,14 +199,33 @@ export const initialResponse = async () => {
     initialResponseSection.innerHTML = "";
     initialResponseSection.appendChild(element);
 
-    // getting the user data
-    const userData = getUserData();
+    // checking that the user is already exist or not
+    const newUser = isNewUser();
+    // getting the details from the new user
+    if (newUser) {
+      // console.log("inside new user");
+      // await getUserData(element.innerText);
+      // return new Promise<void>((resolve, reject) => {
+      //   getUserData(element.innerText,()=>{
+      //     resolve()
+      //   });
+      // }).then(async () => {
+      //   const serviceData = await getServiceByID(
+      //     element.getAttribute("data-id"),
+      //     element.innerText
+      //   );
+      //   console.log(serviceData);
+      // });
+    }
+
+    // testing
 
     // getting the service data
-    // const serviceData = getServiceByID(
+    // const serviceData = await getServiceByID(
     //   element.getAttribute("data-id"),
     //   element.innerText
     // );
+    // console.log(serviceData);
 
     // removing the event listner from btn
     event.target.removeEventListener("click", handleBtnClick);
