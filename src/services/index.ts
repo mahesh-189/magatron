@@ -1,122 +1,127 @@
 import { getInitalResponse, getServiceByID, registerUser } from "../api/index";
 import { chatbotLoader } from "../component/loader";
 import { TOKEN } from "../config";
+import AxiosInstances from "../helper/index";
 import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
 
 // function to get user data
-export const getUserData = async (requestType: string): Promise<void> => {
-  const chatbotBody = document.querySelector("#chatbotBody");
-  const chatbotInputForm = document.querySelector("#chatbotInputForm");
-  const chatbotInputField = document.querySelector("#chatbotInputField");
+export const getUserData = async (requestType: string) => {
+  return new Promise((resolve, reject) => {
+    const chatbotBody = document.querySelector("#chatbotBody");
+    const chatbotInputForm = document.querySelector("#chatbotInputForm");
+    const chatbotInputField = document.querySelector("#chatbotInputField");
 
-  // clearing the chat bot body on load
-  chatbotBody.innerHTML = "";
-  chatbotInputForm.classList.remove("chatbot-form-hidden");
+    // clearing the chat bot body on load
+    chatbotBody.innerHTML = "";
+    chatbotInputForm.classList.remove("chatbot-form-hidden");
 
-  const userDetails = ["", "", ""];
-  let currentIndex = 0;
+    const userDetails = ["", "", ""];
+    let currentIndex = 0;
 
-  const messageFlow = [
-    {
-      message: "Please enter your name",
-      type: "text",
-      minLength: 3,
-      required: true,
-    },
-    {
-      message: "Please enter your phone number",
-      type: "number",
-      required: true,
-      pattern: "",
-    },
-    {
-      message: "Please enter your email id",
-      type: "email",
-      required: true,
-      pattern: "",
-    },
-  ];
+    const messageFlow = [
+      {
+        message: "Please enter your name",
+        type: "text",
+        minLength: 3,
+        required: true,
+      },
+      {
+        message: "Please enter your phone number",
+        type: "number",
+        required: true,
+        pattern: "",
+      },
+      {
+        message: "Please enter your email id",
+        type: "email",
+        required: true,
+        pattern: "",
+      },
+    ];
 
-  const welcomeMessage = createElement("div", { className: "chatbot-text" });
-  const message = createElement("div", { className: "chatbot-text" });
-
-  // displaying the welcome message and first response
-  welcomeMessage.innerText =
-    "Please provide us these details for better assitance";
-  chatbotBody.appendChild(welcomeMessage);
-  message.innerText = messageFlow[currentIndex].message;
-  chatbotBody.appendChild(message);
-  chatbotInputField.setAttribute("minLength", "3");
-
-  // adding the event listner for the form
-  chatbotInputForm.addEventListener("submit", handleFormSubmit);
-
-  // function to handle form submit
-  async function handleFormSubmit(event: Event | SubmitEvent) {
-    event.preventDefault();
-    const myInput =
-      event.target && (event.target as HTMLFormElement).querySelector("input");
-    userDetails[currentIndex] = myInput.value;
-
-    // diplaying user response
-    const userResponse = createElement("p", { className: "user-text" });
-    userResponse.innerText = myInput.value;
-    chatbotBody.appendChild(userResponse);
-
-    // clearing the input value
-    myInput.value = "";
-
-    // sending the next response
-    currentIndex++;
-
-    // changing the input fields attributes as per request
-    if (currentIndex === 1) {
-      const regexPhoneNumber = /^[6789]\d{9}$/;
-      chatbotInputField.setAttribute("pattern", regexPhoneNumber.source);
-      chatbotInputField.setAttribute("type", "tel");
-      chatbotInputField.setAttribute("maxlength", "10");
-    } else if (currentIndex === 2) {
-      chatbotInputField.removeAttribute("minLength");
-      chatbotInputField.removeAttribute("maxlength");
-      chatbotInputField.setAttribute("type", "email");
-      const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      chatbotInputField.setAttribute("pattern", regexEmail.source);
-    } else {
-      chatbotInputForm.removeEventListener("submit", handleFormSubmit);
-      chatbotInputForm.classList.add("chatbot-form-hidden");
-
-      // setting the input fields to its default values
-      chatbotInputField.removeAttribute("minLength");
-      chatbotInputField.removeAttribute("pattern");
-      chatbotInputField.setAttribute("type", "text");
-
-      // creating user data for creating account
-      const { browser, os } = getBrowserAndOS();
-      const data = {
-        fullName: userDetails[0],
-        phoneNumber: userDetails[1],
-        email: userDetails[2],
-        source: "web",
-        os: os,
-        browser: browser,
-        type: requestType,
-      };
-
-      // calling the function to create the user account
-      const res = await registerUser(data);
-      // setting the token inside the local storage
-      localStorage.setItem(TOKEN, res?.data?.userData?.jwtToken);
-      console.log(res);
-      return;
-    }
-
+    const welcomeMessage = createElement("div", { className: "chatbot-text" });
     const message = createElement("div", { className: "chatbot-text" });
+
+    // displaying the welcome message and first response
+    welcomeMessage.innerText =
+      "Please provide us these details for better assitance";
+    chatbotBody.appendChild(welcomeMessage);
     message.innerText = messageFlow[currentIndex].message;
     chatbotBody.appendChild(message);
-  }
+    chatbotInputField.setAttribute("minLength", "3");
 
-  // calling the callback function to indicate completion
-  // callback()
+    // adding the event listner for the form
+    chatbotInputForm.addEventListener("submit", handleFormSubmit);
+
+    // function to handle form submit
+    async function handleFormSubmit(event: Event | SubmitEvent) {
+      event.preventDefault();
+      const myInput =
+        event.target &&
+        (event.target as HTMLFormElement).querySelector("input");
+      userDetails[currentIndex] = myInput.value;
+
+      // diplaying user response
+      const userResponse = createElement("p", { className: "user-text" });
+      userResponse.innerText = myInput.value;
+      chatbotBody.appendChild(userResponse);
+
+      // clearing the input value
+      myInput.value = "";
+
+      // sending the next response
+      currentIndex++;
+
+      // changing the input fields attributes as per request
+      if (currentIndex === 1) {
+        const regexPhoneNumber = /^[6789]\d{9}$/;
+        chatbotInputField.setAttribute("pattern", regexPhoneNumber.source);
+        chatbotInputField.setAttribute("type", "tel");
+        chatbotInputField.setAttribute("maxlength", "10");
+      } else if (currentIndex === 2) {
+        chatbotInputField.removeAttribute("minLength");
+        chatbotInputField.removeAttribute("maxlength");
+        chatbotInputField.setAttribute("type", "email");
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        chatbotInputField.setAttribute("pattern", regexEmail.source);
+      } else {
+        chatbotInputForm.removeEventListener("submit", handleFormSubmit);
+        chatbotInputForm.classList.add("chatbot-form-hidden");
+
+        // setting the input fields to its default values
+        chatbotInputField.removeAttribute("minLength");
+        chatbotInputField.removeAttribute("pattern");
+        chatbotInputField.setAttribute("type", "text");
+
+        // creating user data for creating account
+        const { browser, os } = getBrowserAndOS();
+        const data = {
+          fullName: userDetails[0],
+          phoneNumber: userDetails[1],
+          email: userDetails[2],
+          source: "web",
+          os: os,
+          browser: browser,
+          type: requestType,
+        };
+
+        // calling the function to create the user account
+        const res = await registerUser(data);
+        // setting the token inside the local storage
+        localStorage.setItem("token", res?.data?.userData?.jwtToken);
+        AxiosInstances.defaults.headers.common = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        };
+        console.log(res);
+        res && resolve("");
+        return;
+      }
+
+      const message = createElement("div", { className: "chatbot-text" });
+      message.innerText = messageFlow[currentIndex].message;
+      chatbotBody.appendChild(message);
+    }
+  });
 };
 
 // function to show initial response
@@ -203,29 +208,16 @@ export const initialResponse = async () => {
     const newUser = isNewUser();
     // getting the details from the new user
     if (newUser) {
-      // console.log("inside new user");
-      // await getUserData(element.innerText);
-      // return new Promise<void>((resolve, reject) => {
-      //   getUserData(element.innerText,()=>{
-      //     resolve()
-      //   });
-      // }).then(async () => {
-      //   const serviceData = await getServiceByID(
-      //     element.getAttribute("data-id"),
-      //     element.innerText
-      //   );
-      //   console.log(serviceData);
-      // });
+      const res = getUserData(element.innerText).then(async () => {
+        // getting the service data
+        const serviceData = await getServiceByID(
+          element.getAttribute("data-id"),
+          element.innerText
+        );
+        console.log(serviceData);
+      });
+      console.log(res);
     }
-
-    // testing
-
-    // getting the service data
-    // const serviceData = await getServiceByID(
-    //   element.getAttribute("data-id"),
-    //   element.innerText
-    // );
-    // console.log(serviceData);
 
     // removing the event listner from btn
     event.target.removeEventListener("click", handleBtnClick);
