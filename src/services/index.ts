@@ -205,7 +205,6 @@ export const initialResponse = async () => {
     // checking that the user is already exist or not
     const newUser = isNewUser();
     // getting the details from the new user
-    let pillsResponse = [];
     if (newUser) {
       getUserData(element.innerText).then(async () => {
         // getting the service data
@@ -213,8 +212,11 @@ export const initialResponse = async () => {
           element.getAttribute("data-id"),
           element.innerText
         );
-        console.log("service data", serviceData);
-        pillsResponse = serviceData?.data?.data?.options;
+        const pillsResponse = serviceData?.data?.data?.options;
+        localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
+
+        // calling the function to create pills response
+        await displayPillsResponse();
       });
     } else {
       // getting the service data
@@ -222,36 +224,46 @@ export const initialResponse = async () => {
         element.getAttribute("data-id"),
         element.innerText
       );
-      console.log("service data", serviceData);
-      pillsResponse = serviceData?.data?.data?.options;
+      const pillsResponse = serviceData?.data?.data?.options;
+      localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
+
+      // calling the function to create pills response
+      displayPillsResponse();
     }
 
     // displaying the pills response to the user
-    const chatbotPillContainer = createElement("div", {
-      className: "chatbot-pill-container",
-    });
-    pillsResponse &&
-      pillsResponse.map((element: any) => {
-        const pill = createElement("p", {
-          className: "chatbot-pill-item",
-          innerText: element?.serviceName,
-        });
-        pill.setAttribute("data-id", element?._id);
-        pill.addEventListener("click", handlePillClick);
-        chatbotPillContainer.appendChild(pill);
+    async function displayPillsResponse() {
+      const chatbotPillContainer = createElement("div", {
+        className: "chatbot-pill-container",
       });
-    // adding the pills container in chatbot body
-    chatbotBody.appendChild(chatbotPillContainer);
+      const pillsResponse = JSON.parse(localStorage.getItem("pillsResponse"));
+      console.log(pillsResponse);
 
-    // function to handle the pill click
-    async function handlePillClick(event: MouseEvent) {
-      const element = event.target as HTMLParagraphElement;
-      const res = await getPillsData(
-        element.getAttribute("data-id"),
-        element.innerText
-      );
-      console.log(res);
+      pillsResponse &&
+        pillsResponse.map((element: any) => {
+          const pill = createElement("p", {
+            className: "chatbot-pill-item",
+            innerText: element?.serviceName,
+          });
+          pill.setAttribute("data-id", element?._id);
+          pill.addEventListener("click", handlePillClick);
+          chatbotPillContainer.appendChild(pill);
+        });
+      // adding the pills container in chatbot body
+      chatbotBody.appendChild(chatbotPillContainer);
+
+      // function to handle the pill click
+      async function handlePillClick(event: MouseEvent) {
+        const element = event.target as HTMLParagraphElement;
+        const res = await getPillsData(
+          element.getAttribute("data-id"),
+          element.innerText
+        );
+        console.log(res);
+        element.removeEventListener("click", handlePillClick);
+      }
     }
+    console.log("ja rha hu");
 
     // removing the event listner from btn
     event.target.removeEventListener("click", handleBtnClick);
