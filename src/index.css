@@ -267,3 +267,19 @@ input[type="number"]::-webkit-outer-spin-button {
     transform: translateY(-5px);
   }
 }
+
+/* chatbot pill response css */
+.chatbot-pill-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chatbot-pill-item {
+  padding: 5px 10px;
+  color: white;
+  background-color: #319795;
+  border-radius: 5px;
+  cursor: pointer;
+}

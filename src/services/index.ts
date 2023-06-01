@@ -1,4 +1,9 @@
-import { getInitalResponse, getServiceByID, registerUser } from "../api/index";
+import {
+  getInitalResponse,
+  getPillsData,
+  getServiceByID,
+  registerUser,
+} from "../api/index";
 import { chatbotLoader } from "../component/loader";
 import { TOKEN } from "../config";
 import AxiosInstances from "../helper/index";
@@ -109,10 +114,6 @@ export const getUserData = async (requestType: string) => {
         const res = await registerUser(data);
         // setting the token inside the local storage
         localStorage.setItem("token", res?.data?.userData?.jwtToken);
-        AxiosInstances.defaults.headers.common = {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        };
-        console.log(res);
         res && resolve("");
         return;
       }
@@ -143,7 +144,6 @@ export const initialResponse = async () => {
 
   // getting the initial response
   const initialData = await getInitalResponse();
-  console.log(initialData);
   if (!initialData?.success) {
     const errorMessage = createElement("div", {
       className: "chatbot-text",
@@ -165,7 +165,6 @@ export const initialResponse = async () => {
     className: "chatbot-text",
     innerText: "Please select an option to proceed",
   });
-  const message = createElement("div", { className: "chatbot-text" });
 
   // removing the loader from chat window
   const botLoader = document.querySelector("#myChatbotLoader");
@@ -194,7 +193,6 @@ export const initialResponse = async () => {
   // function to handle the button click functionality
   async function handleBtnClick(event: MouseEvent) {
     const element = event.target as HTMLDivElement;
-    console.log(element, element.getAttribute("data-id"));
     const id = element.getAttribute("data-id");
 
     // removing other pills from initialResponseSection
@@ -207,15 +205,51 @@ export const initialResponse = async () => {
     // checking that the user is already exist or not
     const newUser = isNewUser();
     // getting the details from the new user
+    let pillsResponse = [];
     if (newUser) {
-      const res = getUserData(element.innerText).then(async () => {
+      getUserData(element.innerText).then(async () => {
         // getting the service data
         const serviceData = await getServiceByID(
           element.getAttribute("data-id"),
           element.innerText
         );
-        console.log(serviceData);
+        console.log("service data", serviceData);
+        pillsResponse = serviceData?.data?.data?.options;
       });
+    } else {
+      // getting the service data
+      const serviceData = await getServiceByID(
+        element.getAttribute("data-id"),
+        element.innerText
+      );
+      console.log("service data", serviceData);
+      pillsResponse = serviceData?.data?.data?.options;
+    }
+
+    // displaying the pills response to the user
+    const chatbotPillContainer = createElement("div", {
+      className: "chatbot-pill-container",
+    });
+    pillsResponse &&
+      pillsResponse.map((element: any) => {
+        const pill = createElement("p", {
+          className: "chatbot-pill-item",
+          innerText: element?.serviceName,
+        });
+        pill.setAttribute("data-id", element?._id);
+        pill.addEventListener("click", handlePillClick);
+        chatbotPillContainer.appendChild(pill);
+      });
+    // adding the pills container in chatbot body
+    chatbotBody.appendChild(chatbotPillContainer);
+
+    // function to handle the pill click
+    async function handlePillClick(event: MouseEvent) {
+      const element = event.target as HTMLParagraphElement;
+      const res = await getPillsData(
+        element.getAttribute("data-id"),
+        element.innerText
+      );
       console.log(res);
     }
 

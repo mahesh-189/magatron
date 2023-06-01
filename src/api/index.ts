@@ -27,5 +27,14 @@ export const getServiceByID = async (id: string, serviceName: string) => {
     sender: "user",
     response: serviceName,
   });
-  console.log(res);
+  return res;
+};
+
+// function to get the respective pills data
+export const getPillsData = async (id: string, serviceName: string) => {
+  const res = await AxiosInstances.post(`/services/${id}`, {
+    sender: "user",
+    response: serviceName,
+  });
+  return res;
 };
