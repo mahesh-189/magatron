@@ -337,35 +337,55 @@ function selectCategoryAndLang(
         const courses = response.data.data;
         const chatbotCourseCard = createElement("div", "chatbot-course-card");
         chatbotBody.append(chatbotCourseCard);
-        courses.map((course: any) => {
-          console.log(course);
-
-          const newCourseCard = courseCard(course);
-          chatbotBody.appendChild(newCourseCard);
-
-          //   adding the event listner for the description collapse
-          const showMoreButtons = document.querySelectorAll(
-            ".course-card-element-body-description-btn"
-          );
-
-          const myBtns = Array.from(showMoreButtons);
-          for (let i = 0; i < myBtns.length; i++) {
-            myBtns[i].addEventListener("click", (e) => {
-              e.stopImmediatePropagation();
-              e.stopPropagation();
-              const element = e.target as HTMLButtonElement;
-
-              const desc = element.previousElementSibling;
-              console.log(desc);
-              if (!desc.classList.contains("course-card-description-toggle")) {
-                element.innerText = "Show More";
-              } else {
-                element.innerText = "Show Less";
-              }
-              desc.classList.toggle("course-card-description-toggle");
-            });
+        // displaying the first course
+        const newCourseCard = courseCard(courses[0]);
+        chatbotBody.appendChild(newCourseCard);
+        const showMoreButtons = document.querySelector(
+          ".course-card-element-body-description-btn"
+        );
+        showMoreButtons.addEventListener("click", (event) => {
+          event.stopImmediatePropagation();
+          event.stopPropagation();
+          const element = event.target as HTMLButtonElement;
+          const desc = element.previousElementSibling;
+          if (!desc.classList.contains("course-card-description-toggle")) {
+            element.innerText = "Show More";
+          } else {
+            element.innerText = "Show Less";
           }
+          desc.classList.toggle("course-card-description-toggle");
         });
+
+        // displaying the all courses
+        // courses.map((course: any) => {
+        //   console.log(course);
+
+        //   const newCourseCard = courseCard(course);
+        //   chatbotBody.appendChild(newCourseCard);
+
+        //   //   adding the event listner for the description collapse
+        //   const showMoreButtons = document.querySelectorAll(
+        //     ".course-card-element-body-description-btn"
+        //   );
+
+        //   const myBtns = Array.from(showMoreButtons);
+        //   for (let i = 0; i < myBtns.length; i++) {
+        //     myBtns[i].addEventListener("click", (e) => {
+        //       e.stopImmediatePropagation();
+        //       e.stopPropagation();
+        //       const element = e.target as HTMLButtonElement;
+
+        //       const desc = element.previousElementSibling;
+        //       console.log(desc);
+        //       if (!desc.classList.contains("course-card-description-toggle")) {
+        //         element.innerText = "Show More";
+        //       } else {
+        //         element.innerText = "Show Less";
+        //       }
+        //       desc.classList.toggle("course-card-description-toggle");
+        //     });
+        //   }
+        // });
       }
     }
     try {
