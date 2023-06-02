@@ -311,11 +311,13 @@ function selectCategoryAndLang(
   courseInfoSubmit.type = "submit";
   courseInfoSubmit.textContent = "SUBMIT";
   selectCourseForm.append(courseInfoSubmit);
-
   chatbotBody.append(selectCourseForm);
 
   // event listener to get final course in counselor
-  selectCourseForm.addEventListener("submit", async (event: any) => {
+  selectCourseForm.addEventListener("submit", handleFormSubmitSubmission);
+
+  // function for handling the final course event listner
+  async function handleFormSubmitSubmission(event: any) {
     event.preventDefault();
 
     if (event.target) {
@@ -325,47 +327,50 @@ function selectCategoryAndLang(
       );
       console.log(response);
 
-      const courses = response.data.data;
-      // if (courses.length !== 0) {
-      //   (event.target as HTMLButtonElement)?.remove();
-      // }
-      const chatbotCourseCard = createElement("div", "chatbot-course-card");
-      chatbotBody.append(chatbotCourseCard);
-      courses.map((course: any) => {
-        console.log(course);
+      if (response?.data?.data.length === 0) {
+        const message = createElement("div", {
+          className: "chatbot-text",
+          innerText: "Sorry! There is no course",
+        });
+        chatbotBody.appendChild(message);
+      } else {
+        const courses = response.data.data;
+        const chatbotCourseCard = createElement("div", "chatbot-course-card");
+        chatbotBody.append(chatbotCourseCard);
+        courses.map((course: any) => {
+          console.log(course);
 
-        const newCourseCard = courseCard(course);
-        chatbotBody.appendChild(newCourseCard);
+          const newCourseCard = courseCard(course);
+          chatbotBody.appendChild(newCourseCard);
 
-        //   adding the event listner for the description collapse
+          //   adding the event listner for the description collapse
+          const showMoreButtons = document.querySelectorAll(
+            ".course-card-element-body-description-btn"
+          );
 
-        const showMoreButtons = document.querySelectorAll(
-          ".course-card-element-body-description-btn"
-        );
+          const myBtns = Array.from(showMoreButtons);
+          for (let i = 0; i < myBtns.length; i++) {
+            myBtns[i].addEventListener("click", (e) => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              const element = e.target as HTMLButtonElement;
 
-        // console.log(showMoreButtons);
-        const myBtns = Array.from(showMoreButtons);
-        for (let i = 0; i < myBtns.length; i++) {
-          myBtns[i].addEventListener("click", (e) => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            const element = e.target as HTMLButtonElement;
-
-            const desc = element.previousElementSibling;
-            console.log(desc);
-            if (!desc.classList.contains("course-card-description-toggle")) {
-              element.innerText = "Show More";
-            } else {
-              element.innerText = "Show Less";
-            }
-            desc.classList.toggle("course-card-description-toggle");
-          });
-        }
-      });
+              const desc = element.previousElementSibling;
+              console.log(desc);
+              if (!desc.classList.contains("course-card-description-toggle")) {
+                element.innerText = "Show More";
+              } else {
+                element.innerText = "Show Less";
+              }
+              desc.classList.toggle("course-card-description-toggle");
+            });
+          }
+        });
+      }
     }
     try {
     } catch (error) {
       console.log(error);
     }
-  });
+  }
 }
