@@ -5,7 +5,8 @@ import {
   getServiceByID,
   registerUser,
 } from "../api/index";
-import { chatbotLoader } from "../component/loader";
+import courseCard from "../component/courseCard";
+import chatbotLoader from "../component/loader";
 import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
 
 // function to get user data
@@ -325,19 +326,16 @@ function selectCategoryAndLang(
       console.log(response);
 
       const courses = response.data.data;
-      if (courses.length !== 0) {
-        (event.target as HTMLButtonElement)?.remove();
-      }
+      // if (courses.length !== 0) {
+      //   (event.target as HTMLButtonElement)?.remove();
+      // }
       const chatbotCourseCard = createElement("div", "chatbot-course-card");
       chatbotBody.append(chatbotCourseCard);
-      courses.map((courseCard: any) => {
-        const card = createElement("div", "chatbot-courseDetails-card");
-        card.innerHTML = `<h5>${courseCard.title}</h5>
-                        <p>${courseCard.description}</p>`;
-        chatbotCourseCard?.append(card);
-        console.log(courseCard);
+      courses.map((course: any) => {
+        console.log(course);
 
-        // createCourseCard(data, chatbotCourseCard);
+        const newCourseCard = courseCard(course);
+        chatbotBody.appendChild(newCourseCard);
       });
     }
     try {
