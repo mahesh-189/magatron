@@ -49,3 +49,13 @@ export const getRecommendedCourses = async (
   );
   return res;
 };
+
+// function for chat gpt chat
+export const startChatGpt = async (id: string, question: string) => {
+  const res = await AxiosInstances.post(`/services/${id}`, {
+    sender: "user",
+    action: "chatgpt",
+    response: question,
+  });
+  return res;
+};

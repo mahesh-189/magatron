@@ -9,6 +9,7 @@ import courseCard from "../component/courseCard";
 import courseInputForm from "../component/courseInputForm";
 import chatbotLoader from "../component/loader";
 import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
+import { chatgpt } from "./chatgpt";
 
 // function to get user data
 export const getUserData = async (requestType: string) => {
@@ -98,6 +99,7 @@ export const getUserData = async (requestType: string) => {
         chatbotInputField.removeAttribute("minLength");
         chatbotInputField.removeAttribute("pattern");
         chatbotInputField.setAttribute("type", "text");
+        chatbotInputField.setAttribute("required", "true");
 
         // creating user data for creating account
         const { browser, os } = getBrowserAndOS();
@@ -194,7 +196,6 @@ export const initialResponse = async () => {
   // function to handle the button click functionality
   async function handleBtnClick(event: MouseEvent) {
     const element = event.target as HTMLDivElement;
-    const id = element.getAttribute("data-id");
 
     // removing other pills from initialResponseSection
     const initialResponseSection = document.querySelector(
@@ -208,6 +209,26 @@ export const initialResponse = async () => {
     // getting the details from the new user
     if (newUser) {
       getUserData(element.innerText).then(async () => {
+        console.log(element);
+        if (element.innerText === "Counselor") {
+          // getting the service data
+          const serviceData = await getServiceByID(
+            element.getAttribute("data-id"),
+            element.innerText
+          );
+          const pillsResponse = serviceData?.data?.data?.options;
+          localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
+
+          // calling the function to create pills response
+          await displayPillsResponse();
+        } else if (element.innerText === "QnA") {
+          // calling the chat gpt for starting the conversation
+          chatgpt(element.getAttribute("data-id"));
+        }
+      });
+    } else {
+      console.log(element);
+      if (element.innerText === "Counselor") {
         // getting the service data
         const serviceData = await getServiceByID(
           element.getAttribute("data-id"),
@@ -218,18 +239,10 @@ export const initialResponse = async () => {
 
         // calling the function to create pills response
         await displayPillsResponse();
-      });
-    } else {
-      // getting the service data
-      const serviceData = await getServiceByID(
-        element.getAttribute("data-id"),
-        element.innerText
-      );
-      const pillsResponse = serviceData?.data?.data?.options;
-      localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
-
-      // calling the function to create pills response
-      await displayPillsResponse();
+      } else if (element.innerText === "QnA") {
+        // calling the chat gpt for starting the conversation
+        chatgpt(element.getAttribute("data-id"));
+      }
     }
 
     // displaying the pills response to the user
@@ -280,38 +293,6 @@ function selectCategoryAndLang(
   language: string[]
 ) {
   const chatbotBody = document.querySelector("#chatbotBody");
-  // const selectCourseForm = createElement("form", {
-  //   className: "chatbot-course-form",
-  // });
-
-  // const selectLang = createElement("select", {
-  //   className: "chatbot-select-btn",
-  // });
-  // selectLang.name = "language";
-  // language.map((lang: string) => {
-  //   const option = createElement("option");
-  //   option.innerText = lang;
-  //   option.value = lang;
-  //   selectLang.append(option);
-  // });
-  // selectCourseForm.append(selectLang);
-
-  // const selectCategory = createElement("select", {
-  //   className: "chatbot-select-btn",
-  // });
-  // selectCategory.name = "category";
-  // category.map((cat: { title: string; _id: string }) => {
-  //   const option = createElement("option");
-  //   option.innerText = cat.title;
-  //   option.value = cat._id;
-  //   selectCategory.append(option);
-  // });
-  // selectCourseForm.append(selectCategory);
-
-  // const courseInfoSubmit = createElement("button", "lang");
-  // courseInfoSubmit.type = "submit";
-  // courseInfoSubmit.textContent = "Get Course Details";
-  // selectCourseForm.append(courseInfoSubmit);
 
   // event listener to get final course in counselor
   const selectCourseForm = courseInputForm(category, language);
