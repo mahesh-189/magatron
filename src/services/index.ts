@@ -1,12 +1,11 @@
 import {
   getInitalResponse,
   getPillsData,
+  getRecommendedCourses,
   getServiceByID,
   registerUser,
 } from "../api/index";
 import { chatbotLoader } from "../component/loader";
-import { TOKEN } from "../config";
-import AxiosInstances from "../helper/index";
 import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
 
 // function to get user data
@@ -228,7 +227,7 @@ export const initialResponse = async () => {
       localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
 
       // calling the function to create pills response
-      displayPillsResponse();
+      await displayPillsResponse();
     }
 
     // displaying the pills response to the user
@@ -260,12 +259,90 @@ export const initialResponse = async () => {
           element.innerText
         );
         console.log(res);
+        selectCategoryAndLang(
+          res?.data?.data?.categoriesList,
+          res?.data?.data?.languages
+        );
         element.removeEventListener("click", handlePillClick);
       }
     }
-    console.log("ja rha hu");
 
     // removing the event listner from btn
     event.target.removeEventListener("click", handleBtnClick);
   }
 };
+
+// category and language selction
+function selectCategoryAndLang(
+  category: { title: string; _id: string }[],
+  language: string[]
+) {
+  const chatbotBody = document.querySelector("#chatbotBody");
+  const selectCourseForm = createElement("form", {
+    className: "chatbot-course-form",
+  });
+
+  const selectLang = createElement("select", {
+    className: "chatbot-select-btn",
+  });
+  selectLang.name = "language";
+  language.map((lang: string) => {
+    const option = createElement("option");
+    option.innerText = lang;
+    option.value = lang;
+    selectLang.append(option);
+  });
+  selectCourseForm.append(selectLang);
+
+  const selectCategory = createElement("select", {
+    className: "chatbot-select-btn",
+  });
+  selectCategory.name = "category";
+  category.map((cat: { title: string; _id: string }) => {
+    const option = createElement("option");
+    option.innerText = cat.title;
+    option.value = cat._id;
+    selectCategory.append(option);
+  });
+  selectCourseForm.append(selectCategory);
+
+  const courseInfoSubmit = createElement("button", "lang");
+  courseInfoSubmit.type = "submit";
+  courseInfoSubmit.textContent = "SUBMIT";
+  selectCourseForm.append(courseInfoSubmit);
+
+  chatbotBody.append(selectCourseForm);
+
+  // event listener to get final course in counselor
+  selectCourseForm.addEventListener("submit", async (event: any) => {
+    event.preventDefault();
+
+    if (event.target) {
+      const response = await getRecommendedCourses(
+        event.target[0].value,
+        event.target[1].value
+      );
+      console.log(response);
+
+      const courses = response.data.data;
+      if (courses.length !== 0) {
+        (event.target as HTMLButtonElement)?.remove();
+      }
+      const chatbotCourseCard = createElement("div", "chatbot-course-card");
+      chatbotBody.append(chatbotCourseCard);
+      courses.map((courseCard: any) => {
+        const card = createElement("div", "chatbot-courseDetails-card");
+        card.innerHTML = `<h5>${courseCard.title}</h5>
+                        <p>${courseCard.description}</p>`;
+        chatbotCourseCard?.append(card);
+        console.log(courseCard);
+
+        // createCourseCard(data, chatbotCourseCard);
+      });
+    }
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  });
+}

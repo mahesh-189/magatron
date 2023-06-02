@@ -38,3 +38,14 @@ export const getPillsData = async (id: string, serviceName: string) => {
   });
   return res;
 };
+
+// function to get the recommended courses
+export const getRecommendedCourses = async (
+  language: string,
+  category: string
+) => {
+  const res = await AxiosInstances.get(
+    `/recommend-course/?language=${language}&category=${category}`
+  );
+  return res;
+};
