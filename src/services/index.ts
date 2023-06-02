@@ -6,6 +6,7 @@ import {
   registerUser,
 } from "../api/index";
 import courseCard from "../component/courseCard";
+import courseInputForm from "../component/courseInputForm";
 import chatbotLoader from "../component/loader";
 import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
 
@@ -279,41 +280,42 @@ function selectCategoryAndLang(
   language: string[]
 ) {
   const chatbotBody = document.querySelector("#chatbotBody");
-  const selectCourseForm = createElement("form", {
-    className: "chatbot-course-form",
-  });
+  // const selectCourseForm = createElement("form", {
+  //   className: "chatbot-course-form",
+  // });
 
-  const selectLang = createElement("select", {
-    className: "chatbot-select-btn",
-  });
-  selectLang.name = "language";
-  language.map((lang: string) => {
-    const option = createElement("option");
-    option.innerText = lang;
-    option.value = lang;
-    selectLang.append(option);
-  });
-  selectCourseForm.append(selectLang);
+  // const selectLang = createElement("select", {
+  //   className: "chatbot-select-btn",
+  // });
+  // selectLang.name = "language";
+  // language.map((lang: string) => {
+  //   const option = createElement("option");
+  //   option.innerText = lang;
+  //   option.value = lang;
+  //   selectLang.append(option);
+  // });
+  // selectCourseForm.append(selectLang);
 
-  const selectCategory = createElement("select", {
-    className: "chatbot-select-btn",
-  });
-  selectCategory.name = "category";
-  category.map((cat: { title: string; _id: string }) => {
-    const option = createElement("option");
-    option.innerText = cat.title;
-    option.value = cat._id;
-    selectCategory.append(option);
-  });
-  selectCourseForm.append(selectCategory);
+  // const selectCategory = createElement("select", {
+  //   className: "chatbot-select-btn",
+  // });
+  // selectCategory.name = "category";
+  // category.map((cat: { title: string; _id: string }) => {
+  //   const option = createElement("option");
+  //   option.innerText = cat.title;
+  //   option.value = cat._id;
+  //   selectCategory.append(option);
+  // });
+  // selectCourseForm.append(selectCategory);
 
-  const courseInfoSubmit = createElement("button", "lang");
-  courseInfoSubmit.type = "submit";
-  courseInfoSubmit.textContent = "Get Course Details";
-  selectCourseForm.append(courseInfoSubmit);
-  chatbotBody.append(selectCourseForm);
+  // const courseInfoSubmit = createElement("button", "lang");
+  // courseInfoSubmit.type = "submit";
+  // courseInfoSubmit.textContent = "Get Course Details";
+  // selectCourseForm.append(courseInfoSubmit);
 
   // event listener to get final course in counselor
+  const selectCourseForm = courseInputForm(category, language);
+  chatbotBody.append(selectCourseForm);
   selectCourseForm.addEventListener("submit", handleFormSubmitSubmission);
 
   // function for handling the final course event listner
@@ -326,6 +328,9 @@ function selectCategoryAndLang(
         event.target[1].value
       );
       console.log(response);
+      // removing the form from the chat bot body
+      const selectCourseForm = document.querySelector(".chatbot-course-form");
+      chatbotBody.removeChild(selectCourseForm);
 
       if (response?.data?.data.length === 0) {
         const message = createElement("div", {
@@ -355,6 +360,9 @@ function selectCategoryAndLang(
           }
           desc.classList.toggle("course-card-description-toggle");
         });
+
+        // removing the event listner from the form
+        event.target.removeEventListener("submit", handleFormSubmitSubmission);
 
         // displaying the all courses
         // courses.map((course: any) => {
@@ -387,6 +395,13 @@ function selectCategoryAndLang(
         //   }
         // });
       }
+      // adding the form again for the user to check more courses
+      const newSelectCourseForm = courseInputForm(category, language);
+      chatbotBody.append(newSelectCourseForm);
+      newSelectCourseForm.addEventListener(
+        "submit",
+        handleFormSubmitSubmission
+      );
     }
     try {
     } catch (error) {
