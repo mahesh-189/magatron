@@ -309,7 +309,7 @@ function selectCategoryAndLang(
 
   const courseInfoSubmit = createElement("button", "lang");
   courseInfoSubmit.type = "submit";
-  courseInfoSubmit.textContent = "SUBMIT";
+  courseInfoSubmit.textContent = "Get Course Details";
   selectCourseForm.append(courseInfoSubmit);
   chatbotBody.append(selectCourseForm);
 

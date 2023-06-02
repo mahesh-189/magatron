@@ -220,15 +220,25 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .chatbot-course-form {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.chatbot-select-btn {
+  background-color: transparent;
+  margin: 0;
+  margin-bottom: 5px;
 }
 
 .chatbot-course-form button {
   padding: 10px;
   background-color: #319795;
   color: #fff;
-  margin: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
 /* adding the css for loader component */

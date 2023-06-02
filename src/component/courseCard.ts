@@ -23,9 +23,10 @@ const courseCard = (courseData: any) => {
         <p>Timing : ${courseData?.classTimings?.timings}</p>
     </details>
 
-    <div class="course-card-element-price"><h4>Course Price : ${
-      (courseData?.pricing?.IN * courseData?.pricing?.discount) / 100
-    } &#8377;</h4> <s>${courseData?.pricing?.IN} &#8377;</s> </div>
+    <div class="course-card-element-price"><h4>Course Price : ${Math.floor(
+      courseData?.pricing?.IN -
+        (courseData?.pricing?.IN * courseData?.pricing?.discount) / 100
+    )}&#8377;</h4> <s>${courseData?.pricing?.IN}&#8377;</s> </div>
   </div>`,
   });
 
