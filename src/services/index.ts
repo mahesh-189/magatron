@@ -336,6 +336,31 @@ function selectCategoryAndLang(
 
         const newCourseCard = courseCard(course);
         chatbotBody.appendChild(newCourseCard);
+
+        //   adding the event listner for the description collapse
+
+        const showMoreButtons = document.querySelectorAll(
+          ".course-card-element-body-description-btn"
+        );
+
+        // console.log(showMoreButtons);
+        const myBtns = Array.from(showMoreButtons);
+        for (let i = 0; i < myBtns.length; i++) {
+          myBtns[i].addEventListener("click", (e) => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            const element = e.target as HTMLButtonElement;
+
+            const desc = element.previousElementSibling;
+            console.log(desc);
+            if (!desc.classList.contains("course-card-description-toggle")) {
+              element.innerText = "Show More";
+            } else {
+              element.innerText = "Show Less";
+            }
+            desc.classList.toggle("course-card-description-toggle");
+          });
+        }
       });
     }
     try {

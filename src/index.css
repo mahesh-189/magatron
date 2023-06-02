@@ -283,3 +283,60 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 5px;
   cursor: pointer;
 }
+
+/* designing the course card */
+.course-card-element {
+  margin: 10px 5px;
+}
+
+.course-card-element img {
+  width: 100%;
+}
+
+.course-card-element p {
+  font-size: 15px;
+}
+
+.course-card-element-body-description {
+  overflow: hidden;
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+}
+
+.course-card-description-toggle {
+  -webkit-line-clamp: 2;
+}
+
+.more-class-details {
+  margin-top: 5px;
+}
+
+.more-class-details-summary {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.more-class-details p {
+  font-size: 15px;
+}
+
+.course-card-element-price {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.course-card-element-body-description-btn {
+  /* display: none; */
+  font-size: 15px;
+  color: #319795;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* .course-card-element-body-description-expended {
+  -webkit-line-clamp: 0;
+  overflow: auto;
+} */
