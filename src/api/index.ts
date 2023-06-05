@@ -70,3 +70,9 @@ export const registerUserResponse = async (
   });
   return res;
 };
+
+// function to get previous conversations
+export const getConversations = async () => {
+  const res = await AxiosInstances.get("/conversations");
+  return res;
+};

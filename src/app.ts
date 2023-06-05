@@ -1,5 +1,5 @@
 import { initialResponse } from "./services/index";
-import { createElement } from "./utils/index";
+import { createElement, isNewUser } from "./utils/index";
 
 // function for the chatbot card
 export const createChatbot = () => {
