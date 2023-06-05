@@ -1,5 +1,6 @@
-import { registerUserResponse } from "../api/index";
+import { getConversations, registerUserResponse } from "../api/index";
 import { createElement } from "../utils/index";
+import { fallBackResponse } from "./fallBackResponse";
 
 export const getUserResponse = (answerID: string) => {
   const chatbotBody = document.querySelector("#chatbotBody");
@@ -68,6 +69,22 @@ export const getUserResponse = (answerID: string) => {
         btn2.disabled = true;
         btn2.style.color = "red";
         btn1.style.color = "black";
+      }
+    }
+
+    // checking for the consecutive dislikes
+    if (!isSatisfied) {
+      const myConversations = await getConversations();
+      // console.log(myConversations);
+      const messages = myConversations?.data?.data?.conversations?.messages;
+      const firstLast = messages[messages.length - 1];
+      const secondLast = messages[messages.length - 3];
+      console.log(firstLast, secondLast);
+      if (!firstLast?.feedback && !secondLast?.feedback) {
+        const fallback = fallBackResponse(
+          "I apologize for the inconvenience caused. Please accept our sincere apologies for the unsatisfactory response. We value your feedback and are committed to resolving the issue promptly."
+        );
+        chatbotBody.appendChild(fallback);
       }
     }
   }

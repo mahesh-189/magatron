@@ -10,6 +10,7 @@ import courseInputForm from "../component/courseInputForm";
 import chatbotLoader from "../component/loader";
 import { createElement, getBrowserAndOS, isNewUser } from "../utils/index";
 import { chatgpt } from "./chatgpt";
+import { fallBackResponse } from "./fallBackResponse";
 
 // function to get user data
 export const getUserData = async (requestType: string) => {
@@ -148,11 +149,9 @@ export const initialResponse = async () => {
   // getting the initial response
   const initialData = await getInitalResponse();
   if (!initialData?.success) {
-    const errorMessage = createElement("div", {
-      className: "chatbot-text",
-      innerHTML:
-        "<p>Oops! Failed to load data :(</p><p>Please connect to our support team</p><p>Support Team : 9087654321</p>",
-    });
+    const errorMessage = fallBackResponse(
+      "Oops! Something went wrong. Please check your network connection and try again later."
+    );
 
     // removing the loader from chat window
     const myLoader = document.querySelector("#myChatbotLoader");
