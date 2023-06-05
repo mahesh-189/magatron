@@ -17,10 +17,27 @@ const courseCard = (courseData: any) => {
       <summary class="more-class-details-summary">
         Class Details
       </summary>
-      <p>Batch Name : ${courseData?.classTimings?.batchName}</p>
-        <p>Doubt Clearing : ${courseData?.classTimings?.doubtClearing}</p>
-        <p>Start Date : ${courseData?.classTimings?.startDate}</p>
-        <p>Timing : ${courseData?.classTimings?.timings}</p>
+      ${
+        courseData?.classTimings?.batchName
+          ? `<p>Batch Name: ${courseData.classTimings.batchName}</p>`
+          : ""
+      }
+${
+  courseData?.classTimings?.doubtClearing
+    ? `<p>Doubt Clearing: ${courseData.classTimings.doubtClearing}</p>`
+    : ""
+}
+${
+  courseData?.classTimings?.startDate
+    ? `<p>Start Date: ${courseData.classTimings.startDate}</p>`
+    : ""
+}
+${
+  courseData?.classTimings?.timings
+    ? `<p>Timing: ${courseData.classTimings.timings}</p>`
+    : ""
+}
+
     </details>
 
     <div class="course-card-element-price"><h4>Course Price : &#8377;${Math.floor(
