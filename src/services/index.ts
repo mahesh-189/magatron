@@ -138,6 +138,15 @@ export const initialResponse = async () => {
   // clearing the chat bot body
   chatbotBody.innerHTML = "";
 
+  // checking for the offline system
+  window.addEventListener("offline", () => {
+    chatbotBody.appendChild(
+      fallBackResponse(
+        "Oops! Something went wrong. Please check your network connection and try again later."
+      )
+    );
+  });
+
   // hiding the chat bot input form
   chatbotInputForm.classList.add("chatbot-form-hidden");
 
@@ -325,20 +334,22 @@ function selectCategoryAndLang(
         // displaying the first course
         const newCourseCard = courseCard(courses[0]);
         chatbotBody.appendChild(newCourseCard);
-        const showMoreButtons = document.querySelector(
+        const showMoreButtons = document.querySelectorAll(
           ".course-card-element-body-description-btn"
         );
-        showMoreButtons.addEventListener("click", (event) => {
-          event.stopImmediatePropagation();
-          event.stopPropagation();
-          const element = event.target as HTMLButtonElement;
-          const desc = element.previousElementSibling;
-          if (!desc.classList.contains("course-card-description-toggle")) {
-            element.innerText = "Show More";
-          } else {
-            element.innerText = "Show Less";
-          }
-          desc.classList.toggle("course-card-description-toggle");
+        Array.from(showMoreButtons).map((card) => {
+          card.addEventListener("click", (event) => {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            const element = event.target as HTMLButtonElement;
+            const desc = element.previousElementSibling;
+            if (!desc.classList.contains("course-card-description-toggle")) {
+              element.innerText = "Show More";
+            } else {
+              element.innerText = "Show Less";
+            }
+            desc.classList.toggle("course-card-description-toggle");
+          });
         });
 
         // removing the event listner from the form
