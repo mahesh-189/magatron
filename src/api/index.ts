@@ -59,3 +59,14 @@ export const startChatGpt = async (id: string, question: string) => {
   });
   return res;
 };
+
+// function to register the user response
+export const registerUserResponse = async (
+  answerID: string,
+  isSatisfied: boolean
+) => {
+  const res = await AxiosInstances.post(`/conversations/${answerID}/feedback`, {
+    isSatisfied,
+  });
+  return res;
+};

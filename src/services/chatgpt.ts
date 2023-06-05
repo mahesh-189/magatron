@@ -1,6 +1,7 @@
 import { startChatGpt } from "../api/index";
 import chatbotLoader from "../component/loader";
 import { createElement } from "../utils/index";
+import { getUserResponse } from "./getUserResponse";
 
 export const chatgpt = (id: string) => {
   console.log("inside the chat gpt");
@@ -49,7 +50,10 @@ export const chatgpt = (id: string) => {
       //   getting the chat gpt answer
       console.log("inside the chat gpt");
       const answer = await startChatGpt(id, questionValue);
+      console.log(answer);
+
       const answerData = answer?.data?.data?.response;
+      const answerID = answer?.data?.data?._id;
       const botResponse = createElement("div", {
         className: "chatbot-text",
         innerText: answerData,
@@ -58,6 +62,8 @@ export const chatgpt = (id: string) => {
       //   removing the loader and fetching
       chatbotBody.removeChild(loader);
       chatbotBody.appendChild(botResponse);
+      const takeUserResponse = getUserResponse(answerID);
+      chatbotBody.appendChild(takeUserResponse);
       isFetchingData = false;
     }
   );
