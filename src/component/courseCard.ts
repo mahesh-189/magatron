@@ -40,10 +40,18 @@ ${
 
     </details>
 
-    <div class="course-card-element-price"><h4>Course Price : &#8377;${Math.floor(
-      courseData?.pricing?.IN -
-        (courseData?.pricing?.IN * courseData?.pricing?.discount) / 100
-    )}</h4> <s>&#8377;${courseData?.pricing?.IN}</s> </div>
+    <div class="course-card-element-price">
+    ${
+      courseData?.pricing?.IN === 0
+        ? `<h4>Course Price : Free</h4>`
+        : `<h4>Course Price : &#8377;${Math.floor(
+            courseData?.pricing?.IN -
+              (courseData?.pricing?.IN * courseData?.pricing?.discount) / 100
+          )}</h4> 
+    <s>&#8377;${courseData?.pricing?.IN}</s>`
+    }
+
+     </div>
   </div>`,
   });
 
