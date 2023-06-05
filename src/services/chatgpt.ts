@@ -1,3 +1,4 @@
+import { marked } from "marked";
 import { startChatGpt } from "../api/index";
 import chatbotLoader from "../component/loader";
 import { createElement } from "../utils/index";
@@ -56,7 +57,7 @@ export const chatgpt = (id: string) => {
       const answerID = answer?.data?.data?._id;
       const botResponse = createElement("div", {
         className: "chatbot-text",
-        innerText: answerData,
+        innerHTML: marked(answerData),
       });
 
       //   removing the loader and fetching
