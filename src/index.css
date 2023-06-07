@@ -206,6 +206,12 @@
   border-radius: 5px;
 }
 
+.chatbot-input button:last-child {
+  color: white;
+  width: 25px;
+  padding: 3px 0;
+}
+
 .chatbot-form-hidden {
   display: none;
 }

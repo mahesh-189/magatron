@@ -1,4 +1,5 @@
 import { initialResponse } from "./services/index";
+import { micInput } from "./services/mic";
 import { createElement, isNewUser } from "./utils/index";
 
 // function for the chatbot card
@@ -106,12 +107,25 @@ export const createChatbot = () => {
     textContent: "Send",
     type: "submit",
   });
+  const chatbotMicButton = createElement("button", {
+    innerHTML: `
+   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+</svg>
 
-  chatbotInputForm.append(chatbotSendButton);
+  `,
+    id: "micBtn",
+  });
+
+  chatbotInputForm.append(chatbotSendButton, chatbotMicButton);
 
   // appending chatbot input form to main container
   chatbotContainer.append(chatbotInputForm);
   document.body.append(chatbotContainer);
+
+  // adding the event listner on mic btn
+  const micBtn = document.querySelector("#micBtn");
+  micBtn.addEventListener("click", micInput);
 
   // displaying the initial response
   initialResponse();
