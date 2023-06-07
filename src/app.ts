@@ -27,7 +27,7 @@ export const createChatbot = () => {
   const chatbotInfo = createElement("div", { className: "chatbot-info" });
 
   const chatbotName = createElement("h3");
-  chatbotName.textContent = "Megatron";
+  chatbotName.textContent = "Megatron (Beta)";
 
   chatbotInfo.append(chatbotName);
 

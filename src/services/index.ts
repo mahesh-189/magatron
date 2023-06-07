@@ -152,7 +152,6 @@ export const initialResponse = async () => {
 
   // displaying the loader
   const myLoader = chatbotLoader();
-  myLoader.setAttribute("id", "myChatbotLoader");
   chatbotBody.appendChild(myLoader);
 
   // getting the initial response
@@ -219,6 +218,9 @@ export const initialResponse = async () => {
       getUserData(element.innerText).then(async () => {
         console.log(element);
         if (element.innerText === "Counselor") {
+          // adding the loader
+          const botLoader = chatbotLoader();
+          chatbotBody.appendChild(botLoader);
           // getting the service data
           const serviceData = await getServiceByID(
             element.getAttribute("data-id"),
@@ -228,6 +230,8 @@ export const initialResponse = async () => {
           localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
 
           // calling the function to create pills response
+          const myLoader = document.querySelector("#myChatbotLoader");
+          chatbotBody.removeChild(myLoader);
           await displayPillsResponse();
         } else if (element.innerText === "QnA") {
           // calling the chat gpt for starting the conversation
@@ -237,6 +241,9 @@ export const initialResponse = async () => {
     } else {
       console.log(element);
       if (element.innerText === "Counselor") {
+        // adding the loader
+        const botLoader = chatbotLoader();
+        chatbotBody.appendChild(botLoader);
         // getting the service data
         const serviceData = await getServiceByID(
           element.getAttribute("data-id"),
@@ -246,6 +253,8 @@ export const initialResponse = async () => {
         localStorage.setItem("pillsResponse", JSON.stringify(pillsResponse));
 
         // calling the function to create pills response
+        const myLoader = document.querySelector("#myChatbotLoader");
+        chatbotBody.removeChild(myLoader);
         await displayPillsResponse();
       } else if (element.innerText === "QnA") {
         // calling the chat gpt for starting the conversation

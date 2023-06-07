@@ -1,7 +1,10 @@
 import { createElement } from "../utils/index";
 
 const chatbotLoader = () => {
-  const loader = createElement("div", { className: "chatbot-loader" });
+  const loader = createElement("div", {
+    className: "chatbot-loader",
+    id: "myChatbotLoader",
+  });
   const dot1 = createElement("div", { className: "chatbot-loader-dot" });
   const dot2 = createElement("div", { className: "chatbot-loader-dot" });
   const dot3 = createElement("div", { className: "chatbot-loader-dot" });

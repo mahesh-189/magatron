@@ -5,8 +5,6 @@ import { createElement } from "../utils/index";
 import { getUserResponse } from "./getUserResponse";
 
 export const chatgpt = (id: string) => {
-  console.log("inside the chat gpt");
-
   const chatbotBody = document.querySelector("#chatbotBody");
   const chatbotInputForm = document.querySelector("#chatbotInputForm");
   const chatbotInputField = document.querySelector("#chatbotInputField");
@@ -16,7 +14,7 @@ export const chatgpt = (id: string) => {
   //sending the welcome message
   const message = createElement("div", {
     className: "chatbot-text",
-    innerText: "Please enter your query in chat",
+    innerText: "Hi, I am Megatron, How may I assist you?",
   });
   chatbotBody.appendChild(message);
 
