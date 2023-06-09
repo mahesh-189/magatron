@@ -1,4 +1,5 @@
 import {
+  getConversations,
   getInitalResponse,
   getPillsData,
   getRecommendedCourses,
@@ -201,6 +202,25 @@ export const initialResponse = async () => {
     newPill.addEventListener("click", handleBtnClick);
   });
 
+  // checking the user for showing conversation pill
+  const myUser = isNewUser();
+  if (!myUser) {
+    const conversations = await getConversations();
+    console.log(conversations);
+    const messages = conversations?.data?.data?.conversations?.messages;
+    if (messages.length > 0) {
+      const newPill = createElement("p", {
+        innerText: "Conversation History",
+      });
+      newPill.setAttribute("data-id", "conversations");
+      initialResponseSection.appendChild(newPill);
+      // adding the event listner on pill for getting further response
+      newPill.addEventListener("click", handleBtnClick);
+      // saving the messages in the local storage
+      localStorage.setItem("messages", JSON.stringify(messages));
+    }
+  }
+
   // function to handle the button click functionality
   async function handleBtnClick(event: MouseEvent) {
     const element = event.target as HTMLDivElement;
@@ -238,8 +258,17 @@ export const initialResponse = async () => {
           // calling the chat gpt for starting the conversation
           chatgpt(element.getAttribute("data-id"));
         } else if (element.innerText === "Resume") {
+          const myLoader = chatbotLoader();
+          chatbotBody.appendChild(myLoader);
           const res = await getResume();
           console.log(res);
+          const loader = document.querySelector("#myChatbotLoader");
+          chatbotBody.removeChild(loader);
+          const message = createElement("p", {
+            className: "chatbot-text",
+            innerHTML: `Please visit the link to preview and download your resume. <br> <a href=${res?.data?.pdfUrl} target="_blank">Resume Link</a>`,
+          });
+          chatbotBody.appendChild(message);
         }
       });
     } else {
@@ -275,6 +304,23 @@ export const initialResponse = async () => {
           innerHTML: `Please visit the link to preview and download your resume. <br> <a href=${res?.data?.pdfUrl} target="_blank">Resume Link</a>`,
         });
         chatbotBody.appendChild(message);
+      } else if (element.innerText === "Conversation History") {
+        const message = JSON.parse(localStorage.getItem("messages"));
+        for (let i = 0; i < message.length; i++) {
+          if (i >= 50) {
+            break;
+          }
+          const sender = message[i].sender;
+          let messageClass = "";
+          sender === "chatgpt"
+            ? (messageClass = "chatbot-text")
+            : (messageClass = "user-text");
+          const newMessage = createElement("p", {
+            className: messageClass,
+            innerText: message[i].response,
+          });
+          chatbotBody.appendChild(newMessage);
+        }
       }
     }
 
