@@ -2,6 +2,7 @@ import {
   getInitalResponse,
   getPillsData,
   getRecommendedCourses,
+  getResume,
   getServiceByID,
   registerUser,
 } from "../api/index";
@@ -236,6 +237,9 @@ export const initialResponse = async () => {
         } else if (element.innerText === "QnA") {
           // calling the chat gpt for starting the conversation
           chatgpt(element.getAttribute("data-id"));
+        } else if (element.innerText === "Resume") {
+          const res = await getResume();
+          console.log(res);
         }
       });
     } else {
@@ -259,6 +263,18 @@ export const initialResponse = async () => {
       } else if (element.innerText === "QnA") {
         // calling the chat gpt for starting the conversation
         chatgpt(element.getAttribute("data-id"));
+      } else if (element.innerText === "Resume") {
+        const myLoader = chatbotLoader();
+        chatbotBody.appendChild(myLoader);
+        const res = await getResume();
+        console.log(res);
+        const loader = document.querySelector("#myChatbotLoader");
+        chatbotBody.removeChild(loader);
+        const message = createElement("p", {
+          className: "chatbot-text",
+          innerHTML: `Please visit the link to preview and download your resume. <br> <a href=${res?.data?.pdfUrl} target="_blank">Resume Link</a>`,
+        });
+        chatbotBody.appendChild(message);
       }
     }
 

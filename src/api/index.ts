@@ -71,6 +71,12 @@ export const registerUserResponse = async (
   return res;
 };
 
+// function to get the resume
+export const getResume = async () => {
+  const res = await AxiosInstances.get("/resume");
+  return res;
+};
+
 // function to get previous conversations
 export const getConversations = async () => {
   const res = await AxiosInstances.get("/conversations");
